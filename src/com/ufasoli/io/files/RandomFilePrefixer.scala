@@ -4,14 +4,16 @@ import java.io.File
 import scala.util.Random
 
 
-object RandomFileSuffixer {
-  /**
-   *
-   * User: ufasoli
-   * Date: 25/08/13
-   * Time: 11:14
-   * Project : scala-scripts
-   */
+/**
+ *   A simple script that adds a prefix to any file
+ *   in a folder
+ * User: ufasoli
+ * Date: 25/08/13
+ * Time: 11:14
+ * Project : scala-scripts
+ */
+object RandomFilePrefixer {
+
 
   def main(args: Array[String]) {
 
@@ -21,6 +23,10 @@ object RandomFileSuffixer {
     // override default basePath with the first argument
     if (!args.isEmpty) {
       basePath = args(0)
+      println(s"Using $basePath as base directory")
+    }
+    else{
+      println("No argument provided defaulting to current dir as base directory")
     }
 
 
@@ -41,9 +47,17 @@ object RandomFileSuffixer {
 
     for (f <- files) {
 
-      // generate the final name for the file
-      val finalName = prefixFile(removePrefix("_", f.getName), basePath)
-      f.renameTo(new File(finalName))
+      try{
+        // generate the final name for the file
+        val finalName = prefixFile(removePrefix("_", f.getName), basePath)
+        f.renameTo(new File(finalName))
+        println(s"Renaming ${f.getName} to : $finalName" )
+      }
+      catch {
+
+        case e:Exception => println(s"An error occurred while processing the file ${f.getName} : ${e.getMessage}")
+      }
+
     }
 
 
